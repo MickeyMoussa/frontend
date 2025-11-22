@@ -44,5 +44,6 @@ use this email "admin@nottube.com" along with this password "admin". This will g
 ## 4. Team Members
 ### Yazeed Faris Admin Functionality and all related components
 ### Eyad Shahat Content Creator Functionaly and all related components
+## Intermiediatary functionalities were created with collective effort
 
 
