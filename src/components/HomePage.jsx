@@ -1,0 +1,112 @@
+import React from "react";
+import ShellLayout from "./ShellLayout.jsx";
+import { getAllVideos } from "../data/videos.js";
+
+export default function HomePage() {
+  const [q, setQ] = React.useState("");
+  const VIDEOS = getAllVideos();
+
+  function goSearch() {
+    const term = q.trim();
+    window.location.hash = term ? `#/search?q=${encodeURIComponent(term)}` : "#/home";
+  }
+
+  return (
+    <ShellLayout active="home">
+      <style>{`
+        :root { --fg:#0b0b0b; --muted:#6b7280; --line:#e5e7eb; --bg:#f9fafb; }
+        * { box-sizing: border-box; }
+        .topbar { position: sticky; top: 0; z-index: 10; display:flex; align-items:center; gap:12px; padding:10px 12px; background: var(--bg); border-bottom:1px solid #e5e7eb; border-radius:12px; margin-bottom:10px; }
+        .searchWrap { display:flex; align-items:center; flex:1; background:#fff; border:1px solid #d1d5db; border-radius:999px; height:40px; overflow:hidden; }
+        .searchInput { flex:1; height:100%; border:0; outline:none; background:transparent; color:#111; padding:0 14px; font-size:14px; }
+        .searchBtn { width:44px; height:40px; border:0; background:#f3f4f6; color:#111; cursor:pointer; }
+        .createBtn { height:40px; padding:0 14px; border-radius:999px; border:1px solid #d1d5db; background:#fff; color:#111; font-weight:700; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; }
+        .avatarBtn { width:36px; height:36px; border-radius:999px; background:#0f172a; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; }
+        .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: clamp(10px, 1.6vw, 16px); align-items:start; }
+        .card { background:#fff; border:1px solid #e5e7eb; border-radius:14px; overflow:hidden; text-decoration:none; color:inherit; }
+        .thumb { aspect-ratio:16/9; background:#d1d5db; position:relative; width:100%; }
+        .time { position:absolute; right:8px; bottom:8px; background:rgba(15,23,42,.9); color:#fff; font-size:12px; padding:2px 6px; border-radius:6px; }
+        .meta { display:flex; gap:10px; padding:10px; }
+        .avatar { width:34px; height:34px; border-radius:999px; background:#111827; flex:0 0 auto; }
+        .title { font-weight:700; font-size:14px; line-height:1.3; }
+        .byline { color:var(--muted); font-size:12px; margin-top:4px; }
+        .dot { width:4px; height:4px; background:#cbd5e1; border-radius:999px; display:inline-block; margin:0 6px; transform:translateY(-2px); }
+        .strip { margin-top: clamp(16px, 2vw, 22px); background:#fff; border:1px solid #e5e7eb; border-radius:14px; padding: 14px; }
+        .stripHeader { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+        .stripTitle { display:flex; align-items:center; gap:8px; font-weight:800; }
+        .more { font-size:13px; color:#111827; background:#f3f4f6; border:1px solid #e5e7eb; height:36px; padding:0 10px; border-radius:10px; }
+        .row { display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: clamp(10px, 1.6vw, 16px); }
+      `}</style>
+
+      {/* TOP BAR with NO <form> */}
+      <div className="topbar" role="banner">
+        <div className="searchWrap" role="search">
+          <input
+            className="searchInput"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Search"
+            aria-label="Search"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                e.stopPropagation();
+                goSearch();
+              }
+            }}
+          />
+          <button
+            className="searchBtn"
+            type="button"
+            aria-label="Search"
+            onClick={goSearch}
+          >
+            🔍
+          </button>
+        </div>
+        <a className="createBtn" href="#/upload" role="button">＋ Create</a>
+        <div className="avatarBtn" title="Profile">E</div>
+      </div>
+
+      {/* grid */}
+      <section className="grid" aria-label="Videos">
+        {VIDEOS.slice(0, 6).map((v) => (
+          <a key={v.id} href={`#/video/${v.id}`} className="card">
+            <div className="thumb"><span className="time">{v.length}</span></div>
+            <div className="meta">
+              <div className="avatar" />
+              <div>
+                <div className="title">{v.title}</div>
+                <div className="byline">
+                  {v.channel}<span className="dot" />{v.views} views<span className="dot" />{v.when}
+                </div>
+              </div>
+            </div>
+          </a>
+        ))}
+      </section>
+
+      {/* featured strip */}
+      <section className="strip" aria-label="Featured">
+        <div className="stripHeader">
+          <div className="stripTitle">📹 <span>RELEASED this week!</span></div>
+          <button className="more" type="button">Show more</button>
+        </div>
+        <div className="row">
+          {VIDEOS.slice(6, 9).map((v) => (
+            <a key={v.id} href={`#/video/${v.id}`} className="card">
+              <div className="thumb"><span className="time">{v.length}</span></div>
+              <div className="meta">
+                <div className="avatar" />
+                <div>
+                  <div className="title">{v.title}</div>
+                  <div className="byline">{v.channel}<span className="dot" />{v.when}</div>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    </ShellLayout>
+  );
+}
