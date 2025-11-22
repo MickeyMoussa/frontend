@@ -38,11 +38,11 @@ All state (videos, uploads, flags, likes, etc.) is stored in the browser (e.g., 
 - **Node.js** (recommended: v18+)
 - **npm** (comes with Node) or **yarn**
 
-### Installation
+### logging in as admin
+use this email "admin@nottube.com" along with this password "admin". This will give you access to the administrator panel.
 
-Clone the repository and install dependencies:
+## 4. Team Members
+### Yazeed Faris Admin Functionality and all related components
+### Eyad Shahat Content Creator Functionaly and all related components
 
-```bash
-git clone https://github.com/MickeyMoussa/frontend.git
-cd frontend   # or: cd nottube915/nottube, depending on your folder name
-npm install
+
